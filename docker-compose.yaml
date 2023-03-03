@@ -1,0 +1,43 @@
+version: "3"
+
+services:
+  app:
+    build: .
+    container_name: app_searcher
+    environment:
+      POSTGRES_DSN: ${POSTGRES_DSN}
+    env_file:
+      - ./.env
+    depends_on:
+     - database
+     - es
+    volumes:
+      - ./app:/src/app:rw
+      - ./migrations:/src/migrations:rw
+    ports:
+      - 8000:8000
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+  database:
+    container_name: searcher_db
+    image: postgres:14.2
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PORT: ${POSTGRES_PORT}
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    ports:
+      - 5432:${POSTGRES_PORT}
+
+  es:
+    container_name: elasticsearch
+    image: docker.elastic.co/elasticsearch/elasticsearch:8.6.2
+    environment:
+      - xpack.security.enabled=false
+      - xpack.security.enrollment.enabled=false
+      - ingest.geoip.downloader.enabled=false
+      - discovery.type=single-node
+    ports:
+      - "9200:9200"
