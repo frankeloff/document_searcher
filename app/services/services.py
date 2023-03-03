@@ -28,7 +28,9 @@ async def get_documents_in_ids_order_by_desc(db: AsyncSession, ids: List[int]) -
     return result.scalars().all()
 
 async def get_document_by_id(db: AsyncSession, document_id: int):
-    """ """
+    """
+    Retrieving a document by ID
+    """
     query = select(Document).where(Document.doc_id == document_id)
     result = await db.execute(query)
     return result.scalars().first()
