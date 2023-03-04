@@ -13,6 +13,7 @@ class DocumenIn(Base):
 
 
 class DocumenOut(Base):
+    doc_id: int
     created_date: datetime
 
     class Config:

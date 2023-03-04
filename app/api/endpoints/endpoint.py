@@ -1,24 +1,19 @@
-from elasticsearch import Elasticsearch
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.document import DocumenIn, DocumenOut, DocumenFullOut
 from app.schemas.success_response import SuccessResponse
-from app.api.depends import get_session
+from app.api.depends import get_session, get_es
 from app.services.services import add_doc, delete_doc, search_doc
 from typing import List
-import os
-
-ELASTICSEARCH_HOST = os.environ.get("ELASTICSEARCH_HOST")
-ELASTICSEARCH_PORT = os.environ.get("ELASTICSEARCH_PORT")
-
-es = Elasticsearch(hosts=[f"http://{ELASTICSEARCH_HOST}:{ELASTICSEARCH_PORT}/"])
 
 router = APIRouter()
 
 
-@router.post("/add", response_model=DocumenOut)
+@router.post("/add/", response_model=DocumenOut)
 async def add_document(
-    document: DocumenIn, session: AsyncSession = Depends(get_session)
+    document: DocumenIn,
+    session: AsyncSession = Depends(get_session),
+    es=Depends(get_es),
 ):
     """
     Adding a new document to the database.
@@ -28,8 +23,10 @@ async def add_document(
     return new_document
 
 
-@router.delete("/delete", response_model=SuccessResponse)
-async def delete_document(doc_id: int, session: AsyncSession = Depends(get_session)):
+@router.delete("/delete/", response_model=SuccessResponse)
+async def delete_document(
+    doc_id: int, session: AsyncSession = Depends(get_session), es=Depends(get_es)
+):
     """
     Removing a document from the database.
     """
@@ -38,8 +35,10 @@ async def delete_document(doc_id: int, session: AsyncSession = Depends(get_sessi
     return {"status_code": 200, "message": "success"}
 
 
-@router.get("/search", response_model=List[DocumenFullOut])
-async def search_document(pattern: str, session: AsyncSession = Depends(get_session)):
+@router.get("/search/", response_model=List[DocumenFullOut])
+async def search_document(
+    pattern: str, session: AsyncSession = Depends(get_session), es=Depends(get_es)
+):
     """
     Searching for the first 20 entries that contain a pattern
     """

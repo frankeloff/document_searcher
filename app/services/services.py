@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.document import DocumenIn
 from app.models.document import Document
-from elasticsearch import Elasticsearch, NotFoundError
+from elasticsearch import Elasticsearch
 from fastapi import HTTPException, status
 from sqlalchemy import select, desc
 from elastic_transport import ConnectionError, ConnectionTimeout
@@ -15,7 +15,10 @@ def make_elastic_structure_for_query(pattern: str) -> dict:
     """
     return {"query": {"match": {"text": {"query": pattern, "minimum_should_match": 1}}}}
 
-async def get_documents_in_ids_order_by_desc(db: AsyncSession, ids: List[int]) -> List[Document]:
+
+async def get_documents_in_ids_order_by_desc(
+    db: AsyncSession, ids: List[int]
+) -> List[Document]:
     """
     Retrieving documents sorted by the field "created_date" with IDs that are in the list
     """
@@ -26,6 +29,7 @@ async def get_documents_in_ids_order_by_desc(db: AsyncSession, ids: List[int]) -
     )
     result = await db.execute(query)
     return result.scalars().all()
+
 
 async def get_document_by_id(db: AsyncSession, document_id: int):
     """
