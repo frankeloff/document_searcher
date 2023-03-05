@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.schemas.document import DocumenIn
 from app.models.document import Document
-from elasticsearch import Elasticsearch
+from elasticsearch import Elasticsearch, NotFoundError
 from fastapi import HTTPException, status
 from sqlalchemy import select, desc
 from elastic_transport import ConnectionError, ConnectionTimeout
@@ -59,7 +59,7 @@ async def add_doc(db: AsyncSession, es: Elasticsearch, doc: DocumenIn) -> Docume
             id=new_document_db_model.doc_id,
             document=new_document_es_structure,
         )
-    except (ConnectionError, ConnectionTimeout):
+    except (ConnectionError, ConnectionTimeout) as e:
         await db.delete(new_document_db_model)
         await db.commit()
         raise HTTPException(
@@ -82,12 +82,16 @@ async def delete_doc(db: AsyncSession, es: Elasticsearch, doc_id: int) -> None:
         es.delete(index="doc-index", id=doc_id)
         await db.delete(document_to_delete)
         await db.commit()
-    except (ConnectionError, ConnectionTimeout):
+    except (ConnectionError, ConnectionTimeout) as e:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="Failed to connect to search engine",
         )
-
+    except NotFoundError as e:
+        raise HTTPException(
+            status_code=status.HTTP_502_BAD_GATEWAY,
+            detail="Index does not exist",
+        )
 
 async def search_doc(
     db: AsyncSession, es: Elasticsearch, pattern: str
@@ -101,12 +105,11 @@ async def search_doc(
         search_result = es.search(index="doc-index", body=es_query, size=20)
         ids = [int(obj["_id"]) for obj in search_result["hits"]["hits"]]
         result_arr = await get_documents_in_ids_order_by_desc(db=db, ids=ids)
-    except (ConnectionError, ConnectionTimeout):
+    except (ConnectionError, ConnectionTimeout) as e:
         raise HTTPException(
             status_code=status.HTTP_502_BAD_GATEWAY,
             detail="Failed to connect to search engine",
         )
-
     if len(result_arr) == 0:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, detail="Index does not exist."
