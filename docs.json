@@ -13,7 +13,7 @@
                             "schema": {"$ref": "#/components/schemas/DocumenIn"}
                         }
                     },
-                    "required": true,
+                    "required": true
                 },
                 "responses": {
                     "200": {
@@ -22,7 +22,7 @@
                             "application/json": {
                                 "schema": {"$ref": "#/components/schemas/DocumenOut"}
                             }
-                        },
+                        }
                     },
                     "422": {
                         "description": "Validation Error",
@@ -32,9 +32,9 @@
                                     "$ref": "#/components/schemas/HTTPValidationError"
                                 }
                             }
-                        },
-                    },
-                },
+                        }
+                    }
+                }
             }
         },
         "/api/delete/": {
@@ -47,7 +47,7 @@
                         "required": true,
                         "schema": {"title": "Doc Id", "type": "integer"},
                         "name": "doc_id",
-                        "in": "query",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -59,7 +59,7 @@
                                     "$ref": "#/components/schemas/SuccessResponse"
                                 }
                             }
-                        },
+                        }
                     },
                     "422": {
                         "description": "Validation Error",
@@ -69,9 +69,9 @@
                                     "$ref": "#/components/schemas/HTTPValidationError"
                                 }
                             }
-                        },
-                    },
-                },
+                        }
+                    }
+                }
             }
         },
         "/api/search/": {
@@ -84,7 +84,7 @@
                         "required": true,
                         "schema": {"title": "Pattern", "type": "string"},
                         "name": "pattern",
-                        "in": "query",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -97,10 +97,10 @@
                                     "type": "array",
                                     "items": {
                                         "$ref": "#/components/schemas/DocumenFullOut"
-                                    },
+                                    }
                                 }
                             }
-                        },
+                        }
                     },
                     "422": {
                         "description": "Validation Error",
@@ -110,11 +110,11 @@
                                     "$ref": "#/components/schemas/HTTPValidationError"
                                 }
                             }
-                        },
-                    },
-                },
+                        }
+                    }
+                }
             }
-        },
+        }
     },
     "components": {
         "schemas": {
@@ -126,16 +126,16 @@
                     "rubrics": {
                         "title": "Rubrics",
                         "type": "array",
-                        "items": {"type": "string"},
+                        "items": {"type": "string"}
                     },
                     "text": {"title": "Text", "type": "string"},
                     "doc_id": {"title": "Doc Id", "type": "integer"},
                     "created_date": {
                         "title": "Created Date",
                         "type": "string",
-                        "format": "date-time",
-                    },
-                },
+                        "format": "date-time"
+                    }
+                }
             },
             "DocumenIn": {
                 "title": "DocumenIn",
@@ -145,10 +145,10 @@
                     "rubrics": {
                         "title": "Rubrics",
                         "type": "array",
-                        "items": {"type": "string"},
+                        "items": {"type": "string"}
                     },
-                    "text": {"title": "Text", "type": "string"},
-                },
+                    "text": {"title": "Text", "type": "string"}
+                }
             },
             "DocumenOut": {
                 "title": "DocumenOut",
@@ -158,16 +158,16 @@
                     "rubrics": {
                         "title": "Rubrics",
                         "type": "array",
-                        "items": {"type": "string"},
+                        "items": {"type": "string"}
                     },
                     "text": {"title": "Text", "type": "string"},
                     "doc_id": {"title": "Doc Id", "type": "integer"},
                     "created_date": {
                         "title": "Created Date",
                         "type": "string",
-                        "format": "date-time",
-                    },
-                },
+                        "format": "date-time"
+                    }
+                }
             },
             "HTTPValidationError": {
                 "title": "HTTPValidationError",
@@ -176,9 +176,9 @@
                     "detail": {
                         "title": "Detail",
                         "type": "array",
-                        "items": {"$ref": "#/components/schemas/ValidationError"},
+                        "items": {"$ref": "#/components/schemas/ValidationError"}
                     }
-                },
+                }
             },
             "SuccessResponse": {
                 "title": "SuccessResponse",
@@ -186,8 +186,8 @@
                 "type": "object",
                 "properties": {
                     "status_code": {"title": "Status Code", "type": "integer"},
-                    "message": {"title": "Message", "type": "string"},
-                },
+                    "message": {"title": "Message", "type": "string"}
+                }
             },
             "ValidationError": {
                 "title": "ValidationError",
@@ -197,12 +197,12 @@
                     "loc": {
                         "title": "Location",
                         "type": "array",
-                        "items": {"anyOf": [{"type": "string"}, {"type": "integer"}]},
+                        "items": {"anyOf": [{"type": "string"}, {"type": "integer"}]}
                     },
                     "msg": {"title": "Message", "type": "string"},
-                    "type": {"title": "Error Type", "type": "string"},
-                },
-            },
+                    "type": {"title": "Error Type", "type": "string"}
+                }
+            }
         }
-    },
+    }
 }

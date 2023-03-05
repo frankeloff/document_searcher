@@ -18,10 +18,3 @@ class DocumenOut(Base):
 
     class Config:
         orm_mode = True
-
-
-class DocumenFullOut(DocumenOut):
-    doc_id: int
-
-    class Config:
-        orm_mode = True

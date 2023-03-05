@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from app.schemas.document import DocumenIn, DocumenOut, DocumenFullOut
+from app.schemas.document import DocumenIn, DocumenOut
 from app.schemas.success_response import SuccessResponse
 from app.api.depends import get_session, get_es
 from app.services.services import add_doc, delete_doc, search_doc
@@ -35,7 +35,7 @@ async def delete_document(
     return {"status_code": 200, "message": "success"}
 
 
-@router.get("/search/", response_model=List[DocumenFullOut])
+@router.get("/search/", response_model=List[DocumenOut])
 async def search_document(
     pattern: str, session: AsyncSession = Depends(get_session), es=Depends(get_es)
 ):
