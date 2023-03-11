@@ -93,6 +93,7 @@ async def delete_doc(db: AsyncSession, es: Elasticsearch, doc_id: int) -> None:
             detail="Index does not exist",
         )
 
+
 async def search_doc(
     db: AsyncSession, es: Elasticsearch, pattern: str
 ) -> List[Document]:

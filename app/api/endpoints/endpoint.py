@@ -32,7 +32,7 @@ async def delete_document(
     """
     await delete_doc(db=session, es=es, doc_id=doc_id)
 
-    return {"status_code": 200, "message": "success"}
+    return {"status_code": 204, "message": "success"}
 
 
 @router.get("/search/", response_model=List[DocumenOut])
