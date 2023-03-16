@@ -7,8 +7,7 @@ class Settings(BaseSettings):
         env_file_encoding = "utf-8"
 
     POSTGRES_DSN: str
-    ELASTICSEARCH_HOST: str
-    ELASTICSEARCH_PORT: str
+    ELASTICSEARCH_DSN: str
 
 
 settings = Settings()

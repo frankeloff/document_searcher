@@ -14,7 +14,7 @@ async def get_es():
     try:
         es = Elasticsearch(
             hosts=[
-                f"http://{settings.ELASTICSEARCH_HOST}:{settings.ELASTICSEARCH_PORT}/"
+                settings.ELASTICSEARCH_DSN
             ]
         )
         yield es
